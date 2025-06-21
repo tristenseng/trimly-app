@@ -1,8 +1,10 @@
-import { pgTable, text, uuid } from "drizzle-orm/pg-core";
+import { integer, pgTable, text, uuid } from "drizzle-orm/pg-core";
+import { id } from "../schemaHelpers";
 
 export const StrainTable = pgTable('strains', {
-    id: uuid().primaryKey().defaultRandom(),
+    id,
     name: text().unique().notNull(),
     description: text(),
+    bucketWeight: integer(),
     notes: text()
 })

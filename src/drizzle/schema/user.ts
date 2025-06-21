@@ -1,11 +1,11 @@
-import { integer, pgEnum, pgTable, text, uuid, varchar } from "drizzle-orm/pg-core";
+import { integer, pgEnum, pgTable, text } from "drizzle-orm/pg-core";
 import { LocationTable } from "./location";
-import { createdAt, updatedAt } from "../schemaHelpers";
+import { createdAt, id, updatedAt } from "../schemaHelpers";
 
 export const roleEnum = pgEnum('role', ['employee', 'admin', 'super_admin'])
 
 export const UserTable = pgTable("users", {
-    id: uuid().primaryKey().defaultRandom(),
+    id,
     employeeID: integer().unique(),
     firstName: text().notNull(),
     lastName: text().notNull(),
