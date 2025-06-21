@@ -3,6 +3,6 @@ import { id } from "../schemaHelpers";
 
 export const LocationTable = pgTable('locations', {
     id,
-    name: text().unique().notNull()
-
+    name: text().unique().notNull(),
+    notes: text()
 })
