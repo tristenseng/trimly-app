@@ -10,7 +10,7 @@ export const batchStatusEnum = pgEnum(
     batchStatuses,
 )
 
-export const batchTable = pgTable('batches', {
+export const BatchTable = pgTable('batches', {
     id,
     locationName: text()
         .references(() => LocationTable.name, { onDelete: 'restrict'})

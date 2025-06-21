@@ -1,13 +1,13 @@
 import { integer, pgTable, text, uniqueIndex, uuid } from "drizzle-orm/pg-core";
 import { id } from "../schemaHelpers";
-import { batchTable } from "./batch";
+import { BatchTable } from "./batch";
 import { StrainTable } from "./strain";
 
-export const dayTable = pgTable('days', {
+export const DayTable = pgTable('days', {
     id,
     batchId: uuid()
         .notNull()
-        .references(() => batchTable.id, {onDelete: 'restrict'}),
+        .references(() => BatchTable.id, {onDelete: 'restrict'}),
     batchDay: integer().notNull(),
     //strainname restricted to those connected to the batchId
     strainName: text()

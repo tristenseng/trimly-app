@@ -1,15 +1,15 @@
 import { pgTable, primaryKey, uuid } from "drizzle-orm/pg-core";
 import { id } from "../schemaHelpers";
-import { batchTable } from "./batch";
+import { BatchTable } from "./batch";
 import { StrainTable } from "./strain";
 
 
 
 
-export const batchStrainTable = pgTable('batchStrains', {
+export const BatchStrainTable = pgTable('batchStrains', {
     batchId: uuid()
         .notNull()
-        .references(() => batchTable.id, { onDelete: 'cascade'}),
+        .references(() => BatchTable.id, { onDelete: 'cascade'}),
     strainId: uuid()
         .notNull()
         .references(() => StrainTable.id, { onDelete: 'restrict' }),
