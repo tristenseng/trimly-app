@@ -6,7 +6,7 @@ import { LocationTable } from "./location";
 export const batchStatuses = ['in_progress', 'published'] as const
 export type batchStatus = (typeof batchStatuses)[number]
 export const batchStatusEnum = pgEnum(
-    "batch_statuss",
+    "batch_statuses",
     batchStatuses,
 )
 
@@ -22,6 +22,6 @@ export const BatchTable = pgTable('batches', {
     notes: text(),
 }, (table) => [
         //there cannot be two batches with the same batch number at the same location
-        uniqueIndex('batchTable_number_location_name_')
+        uniqueIndex('batchTable_number_locationName')
             .on(table.locationName, table.number)
 ])
