@@ -25,3 +25,9 @@ export const BatchTable = pgTable('batches', {
         uniqueIndex('batchTable_number_locationName')
             .on(table.locationName, table.number)
 ])
+
+
+//one batch to many locations
+//one batch to many days
+//one batch to many batchStrains
+

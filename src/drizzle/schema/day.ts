@@ -19,3 +19,7 @@ export const DayTable = pgTable('days', {
     uniqueIndex('dayTable_batchDay_strainName_unique')
         .on(table.batchId, table.batchDay, table.strainName)
 ])
+
+
+//many days to one batch
+//one days to many userDay

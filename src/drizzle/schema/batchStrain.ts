@@ -16,3 +16,7 @@ export const BatchStrainTable = pgTable('batchStrains', {
 }, (table) => [
     primaryKey({ columns: [table.batchId, table.strainId]})
 ])
+
+
+//many batchStrains to one batch
+//many batchStrains to one strain
