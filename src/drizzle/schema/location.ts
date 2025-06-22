@@ -6,3 +6,6 @@ export const LocationTable = pgTable('locations', {
     name: text().unique().notNull(),
     notes: text()
 })
+
+//one location to many batches
+//many location to many users
