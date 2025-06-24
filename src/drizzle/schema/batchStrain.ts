@@ -2,6 +2,8 @@ import { boolean, date, pgTable, primaryKey, uniqueIndex, uuid } from "drizzle-o
 import { id } from "../schemaHelpers";
 import { BatchTable } from "./batch";
 import { StrainTable } from "./strain";
+import { relations } from "drizzle-orm";
+import { DayTable } from "./day";
 
 /**
  * BATCHSTRAIN_TABLE
@@ -48,6 +50,20 @@ export const BatchStrainTable = pgTable('batchStrains', {
 ])
 
 
-//many batchStrain to one batch
-//many batchStrain to one strain
-//one batchStrain to many day
+export const batchStrainTableRelations = relations(BatchStrainTable, ({ one, many }) => ({
+  // Many batch-strains belong to one batch
+  batch: one(BatchTable, {
+    fields: [BatchStrainTable.batchId],
+    references: [BatchTable.id],
+  }),
+  
+  // Many batch-strains belong to one strain
+  strain: one(StrainTable, {
+    fields: [BatchStrainTable.strainId],
+    references: [StrainTable.id],
+  }),
+  
+  // One batch-strain can have many work days
+  days: many(DayTable),
+}));
+

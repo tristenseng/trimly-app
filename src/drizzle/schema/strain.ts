@@ -1,5 +1,7 @@
 import { integer, pgTable, text, uuid } from "drizzle-orm/pg-core";
 import { id } from "../schemaHelpers";
+import { relations } from "drizzle-orm";
+import { BatchStrainTable } from "./batchStrain";
 
 /**
  * STRAIN_TABLE
@@ -32,3 +34,8 @@ export const StrainTable = pgTable('strains', {
     bucketWeight: integer().notNull(),
     notes: text()
 })
+
+export const strainTableRelations = relations(StrainTable, ({ many }) => ({
+  // One strain can be used in many batches
+  batchStrains: many(BatchStrainTable),
+}));

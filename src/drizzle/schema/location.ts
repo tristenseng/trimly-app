@@ -1,5 +1,8 @@
 import { boolean, pgTable, text } from "drizzle-orm/pg-core";
 import { id } from "../schemaHelpers";
+import { relations } from "drizzle-orm";
+import { UserLocationTable } from "./userLocation";
+import { BatchTable } from "./batch";
 
 /**
  * LOCATION_TABLE
@@ -33,5 +36,11 @@ export const LocationTable = pgTable('locations', {
     isActive: boolean().notNull().default(true)
 })
 
-//one location to many batches
-//many location to many users
+
+export const locationTableRelations = relations(LocationTable, ({ many }) => ({
+  // One location can have many user assignments
+  userLocations: many(UserLocationTable),
+  
+  // One location can have many batches
+  batches: many(BatchTable),
+}));

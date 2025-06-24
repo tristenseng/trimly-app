@@ -1,6 +1,8 @@
 import { boolean, integer, pgEnum, pgTable, text } from "drizzle-orm/pg-core";
-import { LocationTable } from "./location";
 import { createdAt, id, updatedAt } from "../schemaHelpers";
+import { relations } from 'drizzle-orm';
+import { UserLocationTable } from "./userLocation";
+import { userDay } from "./userDay";
 
 /**
  * USER TABLE
@@ -46,3 +48,14 @@ export const UserTable = pgTable("users", {
     createdAt,
     updatedAt
 })
+
+
+
+export const userTableRelations = relations(UserTable, ({ many }) => ({
+  // One user can be assigned to many locations
+  userLocations: many(UserLocationTable),
+  
+  // One user can have many daily work records
+  userDays: many(userDay),
+}));
+

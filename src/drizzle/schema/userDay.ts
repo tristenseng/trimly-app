@@ -2,6 +2,7 @@ import { pgTable, text, uniqueIndex, uuid } from "drizzle-orm/pg-core";
 import { id } from "../schemaHelpers";
 import { UserTable } from "./user";
 import { DayTable } from "./day";
+import { relations } from "drizzle-orm";
 
 /**
  * USERDAY_TABLE
@@ -44,3 +45,18 @@ export const userDay = pgTable('userDay', {
     uniqueIndex('UserDayTable_userId_dayId')
         .on(table.userId, table.dayId)
 ])
+
+
+export const userDayRelations = relations(userDay, ({ one }) => ({
+  // Many user days belong to one user
+  user: one(UserTable, {
+    fields: [userDay.userId],
+    references: [UserTable.id],
+  }),
+  
+  // Many user days belong to one day
+  day: one(DayTable, {
+    fields: [userDay.dayId],
+    references: [DayTable.id],
+  }),
+}));

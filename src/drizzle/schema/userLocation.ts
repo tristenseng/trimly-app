@@ -2,6 +2,7 @@ import { pgTable, text, uniqueIndex, uuid } from "drizzle-orm/pg-core";
 import { createdAt, id } from "../schemaHelpers";
 import { UserTable } from "./user";
 import { LocationTable } from "./location";
+import { relations } from "drizzle-orm";
 
 /**
  * USERLOCATION_TABLE
@@ -44,3 +45,18 @@ export const UserLocationTable = pgTable('userLocations', {
     uniqueIndex('UserLocationTable_userId_locationName_unique')
         .on(table.userId, table.locationName)
 ])
+
+
+export const userLocationTableRelations = relations(UserLocationTable, ({ one }) => ({
+  // Many user locations belong to one user
+  user: one(UserTable, {
+    fields: [UserLocationTable.userId],
+    references: [UserTable.id],
+  }),
+  
+  // Many user locations belong to one location
+  location: one(LocationTable, {
+    fields: [UserLocationTable.locationName],
+    references: [LocationTable.name],
+  }),
+}));
