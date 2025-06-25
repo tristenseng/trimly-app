@@ -38,12 +38,12 @@ export const UserLocationTable = pgTable('userLocations', {
     userId: uuid()
         .notNull()
         .references(() => UserTable.id, {onDelete: 'cascade'}),
-    locationName: text()
+    locationId: uuid()
         .notNull()
-        .references(() => LocationTable.name, {onDelete: 'restrict'})
+        .references(() => LocationTable.id, {onDelete: 'restrict'})
 }, (table) => [
-    uniqueIndex('UserLocationTable_userId_locationName_unique')
-        .on(table.userId, table.locationName)
+    uniqueIndex('UserLocationTable_userId_locationId_unique')
+        .on(table.userId, table.locationId)
 ])
 
 
@@ -56,7 +56,7 @@ export const userLocationTableRelations = relations(UserLocationTable, ({ one })
   
   // Many user locations belong to one location
   location: one(LocationTable, {
-    fields: [UserLocationTable.locationName],
-    references: [LocationTable.name],
+    fields: [UserLocationTable.locationId],
+    references: [LocationTable.id],
   }),
 }));
