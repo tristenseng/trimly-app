@@ -32,7 +32,7 @@ import { relations } from "drizzle-orm";
  * - Foundation for payroll calculations, productivity analytics, and batch cost tracking
  */
 
-export const userDay = pgTable('userDay', {
+export const UserDayTable = pgTable('userDay', {
   id,
   userId: uuid()
       .notNull()
