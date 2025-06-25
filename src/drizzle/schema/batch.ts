@@ -44,8 +44,8 @@ export const batchStatusEnum = pgEnum(
 
 export const BatchTable = pgTable('batches', {
     id,
-    locationName: text()
-        .references(() => LocationTable.name, { onDelete: 'restrict'})
+    locationId: text()
+        .references(() => LocationTable.id, { onDelete: 'restrict'})
         .notNull(),
     number: integer().notNull(),    //sequential per location
     startDate: date().notNull(),    //start of cycle
@@ -54,15 +54,15 @@ export const BatchTable = pgTable('batches', {
     notes: text(),                  //production notes, issues, observations
 }, (table) => [
         //there cannot be two batches with the same batch number at the same location
-        uniqueIndex('BatchTable_number_locationName')
-            .on(table.locationName, table.number)
+        uniqueIndex('BatchTable_locationId_number')
+            .on(table.locationId, table.number)
 ])
 
 export const batchTableRelations = relations(BatchTable, ({one, many}) => ({
   // Many batches belong to one location
   location: one(LocationTable, {
-    fields: [BatchTable.locationName],
-    references: [LocationTable.name],
+    fields: [BatchTable.locationId],
+    references: [LocationTable.id],
   }),
   
   // One batch can have many strain assignments

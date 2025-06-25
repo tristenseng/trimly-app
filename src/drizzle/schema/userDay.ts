@@ -49,16 +49,16 @@ export const UserDayTable = pgTable('userDay', {
 ])
 
 
-export const userDayRelations = relations(userDay, ({ one }) => ({
+export const userDayRelations = relations(UserDayTable, ({ one }) => ({
   // Many user days belong to one user
   user: one(UserTable, {
-    fields: [userDay.userId],
+    fields: [UserDayTable.userId],
     references: [UserTable.id],
   }),
   
   // Many user days belong to one day
   day: one(DayTable, {
-    fields: [userDay.dayId],
+    fields: [UserDayTable.dayId],
     references: [DayTable.id],
   }),
 }));

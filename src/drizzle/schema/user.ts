@@ -2,7 +2,7 @@ import { boolean, integer, pgEnum, pgTable, text } from "drizzle-orm/pg-core";
 import { createdAt, id, updatedAt } from "../schemaHelpers";
 import { relations } from 'drizzle-orm';
 import { UserLocationTable } from "./userLocation";
-import { userDay } from "./userDay";
+import { UserDayTable } from "./userDay";
 
 /**
  * USER TABLE
@@ -55,6 +55,6 @@ export const userTableRelations = relations(UserTable, ({ many }) => ({
   userLocations: many(UserLocationTable),
   
   // One user can have many daily work records
-  userDays: many(userDay),
+  userDays: many(UserDayTable),
 }));
 

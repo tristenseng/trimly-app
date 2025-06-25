@@ -3,7 +3,7 @@ import { id } from "../schemaHelpers";
 import { StrainTable } from "./strain";
 import { BatchStrainTable } from "./batchStrain";
 import { relations } from "drizzle-orm";
-import { userDay } from "./userDay";
+import { UserDayTable } from "./userDay";
 
 /**
  * DAY_TABLE
@@ -37,7 +37,7 @@ export const DayTable = pgTable('days', {
   day: integer().notNull(),
   notes: text(),
 }, (table) => [
-  uniqueIndex('DayTable_batchStrain_day_unique')
+  uniqueIndex('DayTable_batchStrainId_day_unique')
       .on(table.batchStrainId, table.day)
 ])
 
@@ -50,5 +50,5 @@ export const dayTableRelations = relations(DayTable, ({ one, many }) => ({
   }),
   
   // One day can have many user work records
-  userDays: many(userDay),
+  userDays: many(UserDayTable),
 }));
