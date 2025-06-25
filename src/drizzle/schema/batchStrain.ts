@@ -14,7 +14,7 @@ import { DayTable } from "./day";
  *
  * Business Rules:
  * - Each batch can contain multiple different strains.
- * - Each strain can be used across multiple batches (same strain grown in different cycles)
+ * - Each strain can be used across multiple batches (same strain grown in different batch processing cycles)
  * - Cannot have duplicate strain assignments within the same batch (enforced by unique constraint)
  * - Must reference valid batch and strain records that exist in their respective tables
  * - Batch-strain combinations cannot be deleted if referenced by day records
@@ -28,25 +28,24 @@ import { DayTable } from "./day";
  *
  * Notes:
  * - Essential validation layer ensuring work can only be logged on valid strain-batch pairs
- * - Enables multi-strain batch cultivation and tracking
+ * - Enables multi-strain batch processing cycles and tracking
  * - Cascade delete on batch removal automatically cleans up strain assignments
- * - Foundation for strain-specific batch reporting and cultivation analytics
+ * - Foundation for strain-specific batch reporting and analytics
  * - Required record before any daily work can be logged for a batch-strain combination
  */
 
 
 export const BatchStrainTable = pgTable('batchStrains', {
-    id,
-    batchId: uuid()
-        .notNull()
-        .references(() => BatchTable.id, { onDelete: 'cascade'}),
-    strainId: uuid()
-        .notNull()
-        .references(() => StrainTable.id, { onDelete: 'restrict' }),
-    isCompleted: boolean().notNull().default(false)
+  id,
+  batchId: uuid()
+      .notNull()
+      .references(() => BatchTable.id, { onDelete: 'cascade'}),
+  strainId: uuid()
+      .notNull()
+      .references(() => StrainTable.id, { onDelete: 'restrict' }),
 }, (table) => [
-    uniqueIndex('BatchStrainTable_batchId_strainId_unique')
-        .on(table.batchId, table.strainId)
+  uniqueIndex('BatchStrainTable_batchId_strainId_unique')
+      .on(table.batchId, table.strainId)
 ])
 
 

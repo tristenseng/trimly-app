@@ -29,7 +29,7 @@ import { BatchStrainTable } from "./batchStrain";
  *
  * Notes:
  * - startDate marks beginning of actual batch processing (not planning phase)
- * - Batch cycles can run shorter or longer than planned depending on various factors
+ * - Batch processing cycles can run shorter or longer than planned depending on various factors
  * - Individual strains within batch may complete on different days
  * - Sequential numbering enables easy batch identification within location scope
  * - Foundation for production planning, capacity management, and completion tracking

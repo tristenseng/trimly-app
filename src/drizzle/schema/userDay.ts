@@ -1,4 +1,4 @@
-import { pgTable, text, uniqueIndex, uuid } from "drizzle-orm/pg-core";
+import { numeric, pgTable, text, uniqueIndex, uuid } from "drizzle-orm/pg-core";
 import { id } from "../schemaHelpers";
 import { UserTable } from "./user";
 import { DayTable } from "./day";
@@ -8,7 +8,7 @@ import { relations } from "drizzle-orm";
  * USERDAY_TABLE
  *
  * Junction table tracking individual employee work contributions on specific days and batches.
- * Core operational record linking workers, work days, and cultivation activities.
+ * Core operational record linking workers, work days, and batch processing activities.
  * Primary data source for payroll, productivity tracking, and batch labor allocation.
  * 
  * Business Rules:
@@ -17,11 +17,13 @@ import { relations } from "drizzle-orm";
  * - Only admins can create, read, update, or delete userDay records (employees have read-only access)
  * - Admins can only create records for employees at their shared location
  * - All work logging must reference valid combinations of users, days, and batch-strain pairs
+ * - Amount refers to the amount (in grams) processed by the user for a specific strain on a specific day within a specific batch.
+ * - Hour refers to the duration of work it took to process that amount (in grams).
  *
  * Relationships:
  * - Many-to-one with users (tracks which employee performed the work)
  * - Many-to-one with days (tracks when the work was performed)
- * - Many-to-one with batches (tracks which cultivation batch was worked on)
+ * - Many-to-one with batches (tracks which batch was worked on)
  * - Location-based access control inherited through user-location and batch-location relationships
  *
  * Notes:
@@ -31,19 +33,19 @@ import { relations } from "drizzle-orm";
  */
 
 export const userDay = pgTable('userDay', {
-    id,
-    userId: uuid()
-        .notNull()
-        .references(() => UserTable.id, {onDelete: 'restrict'}),
-    dayId: uuid()
-        .notNull()
-        .references(() => DayTable.id, {onDelete: 'restrict'}),
-    amount: text().notNull(),
-    hours: text().notNull(),
-    notes: text()
+  id,
+  userId: uuid()
+      .notNull()
+      .references(() => UserTable.id, {onDelete: 'restrict'}),
+  dayId: uuid()
+      .notNull()
+      .references(() => DayTable.id, {onDelete: 'restrict'}),
+  amount: numeric({precision: 6, scale: 2}).notNull(),
+  hours: numeric({precision: 4, scale: 2}).notNull(),
+  notes: text()
 }, (table) => [
-    uniqueIndex('UserDayTable_userId_dayId')
-        .on(table.userId, table.dayId)
+  uniqueIndex('UserDayTable_userId_dayId')
+      .on(table.userId, table.dayId)
 ])
 
 

@@ -34,16 +34,16 @@ import { relations } from "drizzle-orm";
  */
 
 export const UserLocationTable = pgTable('userLocations', {
-    id,
-    userId: uuid()
-        .notNull()
-        .references(() => UserTable.id, {onDelete: 'cascade'}),
-    locationId: uuid()
-        .notNull()
-        .references(() => LocationTable.id, {onDelete: 'restrict'})
+  id,
+  userId: uuid()
+      .notNull()
+      .references(() => UserTable.id, {onDelete: 'cascade'}),
+  locationId: uuid()
+      .notNull()
+      .references(() => LocationTable.id, {onDelete: 'restrict'})
 }, (table) => [
-    uniqueIndex('UserLocationTable_userId_locationId_unique')
-        .on(table.userId, table.locationId)
+  uniqueIndex('UserLocationTable_userId_locationId_unique')
+      .on(table.userId, table.locationId)
 ])
 
 

@@ -30,15 +30,15 @@ import { userDay } from "./userDay";
  */
 
 export const DayTable = pgTable('days', {
-    id,
-    batchStrainId: uuid()
-        .notNull()
-        .references(() => BatchStrainTable.id, {onDelete: 'restrict'}),
-    day: integer().notNull(),
-    notes: text(),
+  id,
+  batchStrainId: uuid()
+      .notNull()
+      .references(() => BatchStrainTable.id, {onDelete: 'restrict'}),
+  day: integer().notNull(),
+  notes: text(),
 }, (table) => [
-    uniqueIndex('DayTable_batchStrain_day_unique')
-        .on(table.batchStrainId, table.day)
+  uniqueIndex('DayTable_batchStrain_day_unique')
+      .on(table.batchStrainId, table.day)
 ])
 
 

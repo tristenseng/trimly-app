@@ -30,10 +30,9 @@ import { BatchTable } from "./batch";
  */
 
 export const LocationTable = pgTable('locations', {
-    id,
-    name: text().unique().notNull(),
-    notes: text(),
-    isActive: boolean().notNull().default(true)
+  id,
+  name: text().unique().notNull(),
+  notes: text()
 })
 
 
