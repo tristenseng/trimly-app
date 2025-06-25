@@ -23,7 +23,7 @@ import { BatchStrainTable } from "./batchStrain";
  * - Referenced throughout batch-related operations and reporting
  *
  * Notes:
- * - Name field used as foreign key reference throughout the system
+ * - id field used as foreign key reference throughout the system
  * - No soft delete implemented - strains are permanent once created
  * - Strain selection drives batch planning and workflows
  */
@@ -32,7 +32,7 @@ export const StrainTable = pgTable('strains', {
   id,
   name: text().unique().notNull(),
   description: text(),
-  bucketWeight: numeric({precision: 6, scale:3}).notNull(),
+  bucketWeight: numeric(10, 2).notNull(),
   notes: text()
 })
 
