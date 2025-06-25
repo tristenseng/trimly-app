@@ -18,7 +18,6 @@ import { userDay } from "./userDay";
  * - Super admins have access to all locations regardless of userLocations assignments
  * - Admins can only see/manage employees from locations they share access to
  * - Employees have read-only access and cannot create/update/delete any batch, strain, or location data
- * - Users are soft-deleted (isActive = false) to preserve historical work records
  *
  * Relationships:
  * - Many-to-many with locations via userLocations junction table

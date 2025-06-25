@@ -26,7 +26,6 @@ import { BatchTable } from "./batch";
  * Notes:
  * - Name field used as foreign key reference throughout the system
  * - Location-based filtering ensures admins only see relevant data
- * - Locations can become inactive.
  */
 
 export const LocationTable = pgTable('locations', {
