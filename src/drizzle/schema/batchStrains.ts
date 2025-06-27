@@ -1,5 +1,5 @@
-import { pgTable, uniqueIndex, uuid } from "drizzle-orm/pg-core";
-import { createdAt, id, updatedAt } from "../schemaHelpers";
+import { pgEnum, pgTable, uniqueIndex, uuid } from "drizzle-orm/pg-core";
+import { createdAt, id, softDelete, updatedAt } from "../schemaHelpers";
 import { Batches } from "./batches";
 import { Strains } from "./strains";
 import { relations } from "drizzle-orm";
@@ -34,6 +34,12 @@ import { WorkEntries } from "./workEntries";
  * - Required record before any daily work can be logged for a batch-strain combination
  */
 
+export const batchStrainsStatuses = ['planned', 'in_progress', 'published'] as const
+export type batchStrainsStatus = (typeof batchStrainsStatuses)[number]
+export const batchStrainsStatusEnum = pgEnum(
+    "batch_strains_statuses",
+    batchStrainsStatuses,
+)
 
 export const BatchStrains = pgTable('batchStrains', {
   id,
@@ -43,11 +49,16 @@ export const BatchStrains = pgTable('batchStrains', {
   strainId: uuid()
       .notNull()
       .references(() => Strains.id, { onDelete: 'restrict' }),
+  status: batchStrainsStatusEnum().notNull().default('planned'),
   createdAt,
-  updatedAt
+  updatedAt,
+  ...softDelete
 }, (table) => [
   uniqueIndex('BatchStrains_batchId_strainId_unique')
-      .on(table.batchId, table.strainId)
+      .on(table.batchId, table.strainId),
+      
+
+      
 ])
 
 

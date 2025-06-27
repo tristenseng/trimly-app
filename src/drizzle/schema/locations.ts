@@ -1,5 +1,5 @@
 import { pgTable, text } from "drizzle-orm/pg-core";
-import { createdAt, id, updatedAt } from "../schemaHelpers";
+import { createdAt, id, softDelete, updatedAt } from "../schemaHelpers";
 import { relations } from "drizzle-orm";
 import { LocationAssignments } from "./locationAssignments";
 import { Batches } from "./batches";
@@ -33,7 +33,8 @@ export const Locations = pgTable('locations', {
   name: text().unique().notNull(),
   notes: text(),
   createdAt,
-  updatedAt
+  updatedAt,
+  ...softDelete
 })
 
 

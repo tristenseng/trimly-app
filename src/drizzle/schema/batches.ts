@@ -1,5 +1,5 @@
-import { date, integer, pgEnum, pgTable, text, uniqueIndex, uuid } from "drizzle-orm/pg-core";
-import { createdAt, id, updatedAt } from "../schemaHelpers";
+import { date, index, integer, pgEnum, pgTable, text, uniqueIndex, uuid } from "drizzle-orm/pg-core";
+import { createdAt, id, softDelete, updatedAt } from "../schemaHelpers";
 import { Locations } from "./locations";
 import { relations } from "drizzle-orm";
 import { BatchStrains } from "./batchStrains";
@@ -48,14 +48,32 @@ export const Batches = pgTable('batches', {
     number: integer().notNull(),    //sequential per location
     startDate: date().notNull(),    //start of cycle
     endDate: date(),                //when batch is complete
-    status: batchStatusEnum().notNull().default('in_progress'),
+    status: batchStatusEnum().notNull().default('planned'),
     notes: text(),                  //production notes, issues, observations
     createdAt,
-    updatedAt
+    updatedAt,
+    ...softDelete
 }, (table) => [
         //there cannot be two batches with the same batch number at the same location
         uniqueIndex('Batches_locationId_number')
-            .on(table.locationId, table.number)
+            .on(table.locationId, table.number),
+
+        // Primary relationship and filtering
+        index('batches_location_id_idx').on(table.locationId),
+        index('batches_status_idx').on(table.status),
+        
+        // Combined filtering
+        index('batches_location_status_idx').on(table.locationId, table.status),
+        
+        // Batch number searches within location
+        index('batches_location_number_idx').on(table.locationId, table.number),
+        
+        // Temporal analysis
+        index('batches_created_at_idx').on(table.createdAt),
+        index('batches_location_created_idx').on(table.locationId, table.createdAt),
+        
+        // Status change analysis
+        index('batches_status_created_idx').on(table.status, table.createdAt)
 ])
 
 export const BatchesRelations = relations(Batches, ({one, many}) => ({

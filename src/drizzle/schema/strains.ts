@@ -1,5 +1,5 @@
 import { numeric, pgTable, text } from "drizzle-orm/pg-core";
-import { createdAt, id, updatedAt } from "../schemaHelpers";
+import { createdAt, id, softDelete, updatedAt } from "../schemaHelpers";
 import { relations } from "drizzle-orm";
 import { BatchStrains } from "./batchStrains";
 
@@ -35,7 +35,8 @@ export const Strains = pgTable('strains', {
   bucketWeight: numeric({precision: 6, scale:3}).notNull(),
   notes: text(),
   createdAt,
-  updatedAt
+  updatedAt,
+  ...softDelete
 })
 
 export const strainTableRelations = relations(Strains, ({ many }) => ({

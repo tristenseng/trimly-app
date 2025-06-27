@@ -28,7 +28,7 @@
 
 import { date, index, integer, pgEnum, pgTable, text, uniqueIndex, uuid } from "drizzle-orm/pg-core"
 import { createdAt, id, updatedAt } from "../schemaHelpers"
-import { Users } from "./Users"
+import { Users } from "./users"
 
 export const writeUpSeverities = ['verbal_warning', 'written_warning', 'final_warning', 'suspension', 'termination'] as const
 export type writeUpSeverity = (typeof writeUpSeverities)[number]

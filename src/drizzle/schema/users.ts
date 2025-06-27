@@ -1,5 +1,5 @@
 import { integer, pgEnum, pgTable, text } from "drizzle-orm/pg-core";
-import { createdAt, id, updatedAt } from "../schemaHelpers";
+import { createdAt, id, softDelete, updatedAt } from "../schemaHelpers";
 import { relations } from 'drizzle-orm';
 import { LocationAssignments } from "./locationAssignments";
 import { WorkEntries } from "./workEntries";
@@ -45,7 +45,8 @@ export const Users = pgTable("users", {
     role: roleStatusEnum().notNull().default('employee'),
     email: text().unique().notNull(),
     createdAt,
-    updatedAt
+    updatedAt,
+    ...softDelete
 })
 
 

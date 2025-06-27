@@ -1,1 +1,1 @@
-export * from "@/drizzle/schema/Users"
+export * from "@/drizzle/schema/users"

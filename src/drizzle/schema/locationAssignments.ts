@@ -1,6 +1,6 @@
 import { pgTable, uniqueIndex, uuid } from "drizzle-orm/pg-core";
-import { id } from "../schemaHelpers";
-import { Users } from "./Users";
+import { createdAt, id, softDelete, updatedAt } from "../schemaHelpers";
+import { Users } from "./users";
 import { Locations } from "./locations";
 import { relations } from "drizzle-orm";
 
@@ -40,7 +40,10 @@ export const LocationAssignments = pgTable('locationAssignments', {
       .references(() => Users.id, {onDelete: 'cascade'}),
   locationId: uuid()
       .notNull()
-      .references(() => Locations.id, {onDelete: 'restrict'})
+      .references(() => Locations.id, {onDelete: 'restrict'}),
+  createdAt,
+  updatedAt,
+  ...softDelete
 }, (table) => [
   uniqueIndex('LocationAssignments_userId_locationId_unique')
       .on(table.userId, table.locationId)

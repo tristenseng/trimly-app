@@ -1,6 +1,6 @@
-import { date, numeric, pgTable, text, uniqueIndex, uuid } from "drizzle-orm/pg-core";
-import { createdAt, id, updatedAt } from "../schemaHelpers";
-import { Users } from "./Users";
+import { date, index, numeric, pgTable, text, uniqueIndex, uuid } from "drizzle-orm/pg-core";
+import { createdAt, id, softDelete, updatedAt } from "../schemaHelpers";
+import { Users } from "./users";
 import { relations } from "drizzle-orm";
 import { BatchStrains } from "./batchStrains";
 
@@ -45,10 +45,20 @@ export const WorkEntries = pgTable('workEntries', {
   hours: numeric({precision: 4, scale: 2}).notNull(),
   notes: text(),
   createdAt,
-  updatedAt
+  updatedAt,
+  ...softDelete
 }, (table) => [
+  //strain cannot happen twice on a given day in a given batch
   uniqueIndex('WorkEntries_userId_batchStrainsId_date')
-      .on(table.userId, table.batchStrainsId, table.date)
+      .on(table.userId, table.batchStrainsId, table.date),
+  //find information on a particular date
+  index('workEntries_date_idx').on(table.date),
+
+  //find work of a user on a given date
+  index('workEntries_userId_date_idx').on(table.userId, table.date),
+
+  //find all work for a strain within a batch
+  index('workEntries_batchStrainId_date_idx').on(table.batchStrainsId, table.date),
 ])
 
 
