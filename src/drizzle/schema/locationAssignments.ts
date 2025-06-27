@@ -1,7 +1,7 @@
 import { pgTable, text, uniqueIndex, uuid } from "drizzle-orm/pg-core";
 import { createdAt, id } from "../schemaHelpers";
-import { UserTable } from "./user";
-import { LocationTable } from "./location";
+import { Users } from "./users";
+import { Locations } from "./locations";
 import { relations } from "drizzle-orm";
 
 /**
@@ -33,30 +33,30 @@ import { relations } from "drizzle-orm";
  * - Foundation for future location-based reporting and workforce management
  */
 
-export const UserLocationTable = pgTable('userLocations', {
+export const LocationAssignments = pgTable('locationAssignments', {
   id,
   userId: uuid()
       .notNull()
-      .references(() => UserTable.id, {onDelete: 'cascade'}),
+      .references(() => Users.id, {onDelete: 'cascade'}),
   locationId: uuid()
       .notNull()
-      .references(() => LocationTable.id, {onDelete: 'restrict'})
+      .references(() => Locations.id, {onDelete: 'restrict'})
 }, (table) => [
-  uniqueIndex('UserLocationTable_userId_locationId_unique')
+  uniqueIndex('LocationAssignments_userId_locationId_unique')
       .on(table.userId, table.locationId)
 ])
 
 
-export const userLocationTableRelations = relations(UserLocationTable, ({ one }) => ({
+export const LocationAssignmentsRelations = relations(LocationAssignments, ({ one }) => ({
   // Many user locations belong to one user
-  user: one(UserTable, {
-    fields: [UserLocationTable.userId],
-    references: [UserTable.id],
+  user: one(Users, {
+    fields: [LocationAssignments.userId],
+    references: [Users.id],
   }),
   
   // Many user locations belong to one location
-  location: one(LocationTable, {
-    fields: [UserLocationTable.locationId],
-    references: [LocationTable.id],
+  location: one(Locations, {
+    fields: [LocationAssignments.locationId],
+    references: [Locations.id],
   }),
 }));

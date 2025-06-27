@@ -1,9 +1,9 @@
 import { integer, pgTable, text, uniqueIndex, uuid } from "drizzle-orm/pg-core";
 import { id } from "../schemaHelpers";
-import { StrainTable } from "./strain";
-import { BatchStrainTable } from "./batchStrain";
+import { StrainTable } from "./strains";
+import { BatchStrains } from "./batchStrains";
 import { relations } from "drizzle-orm";
-import { UserDayTable } from "./userDay";
+import { WorkEntries } from "./workEntries";
 
 /**
  * DAY_TABLE
@@ -33,7 +33,7 @@ export const DayTable = pgTable('days', {
   id,
   batchStrainId: uuid()
       .notNull()
-      .references(() => BatchStrainTable.id, {onDelete: 'restrict'}),
+      .references(() => BatchStrains.id, {onDelete: 'restrict'}),
   day: integer().notNull(),
   notes: text(),
 }, (table) => [
@@ -44,11 +44,11 @@ export const DayTable = pgTable('days', {
 
 export const dayTableRelations = relations(DayTable, ({ one, many }) => ({
   // Many days belong to one batch-strain combination
-  batchStrain: one(BatchStrainTable, {
+  batchStrain: one(BatchStrains, {
     fields: [DayTable.batchStrainId],
-    references: [BatchStrainTable.id],
+    references: [BatchStrains.id],
   }),
   
   // One day can have many user work records
-  userDays: many(UserDayTable),
+  userDays: many(WorkEntries),
 }));

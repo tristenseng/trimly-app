@@ -1,8 +1,8 @@
 import { date, integer, pgEnum, pgTable, text, uniqueIndex } from "drizzle-orm/pg-core";
 import { id } from "../schemaHelpers";
-import { LocationTable } from "./location";
+import { Locations } from "./locations";
 import { relations } from "drizzle-orm";
-import { BatchStrainTable } from "./batchStrain";
+import { BatchStrains } from "./batchStrains";
 
 
 /**
@@ -42,10 +42,10 @@ export const batchStatusEnum = pgEnum(
     batchStatuses,
 )
 
-export const BatchTable = pgTable('batches', {
+export const Batches = pgTable('batches', {
     id,
     locationId: text()
-        .references(() => LocationTable.id, { onDelete: 'restrict'})
+        .references(() => Locations.id, { onDelete: 'restrict'})
         .notNull(),
     number: integer().notNull(),    //sequential per location
     startDate: date().notNull(),    //start of cycle
@@ -54,17 +54,17 @@ export const BatchTable = pgTable('batches', {
     notes: text(),                  //production notes, issues, observations
 }, (table) => [
         //there cannot be two batches with the same batch number at the same location
-        uniqueIndex('BatchTable_locationId_number')
+        uniqueIndex('Batches_locationId_number')
             .on(table.locationId, table.number)
 ])
 
-export const batchTableRelations = relations(BatchTable, ({one, many}) => ({
+export const BatchesRelations = relations(Batches, ({one, many}) => ({
   // Many batches belong to one location
-  location: one(LocationTable, {
-    fields: [BatchTable.locationId],
-    references: [LocationTable.id],
+  location: one(Locations, {
+    fields: [Batches.locationId],
+    references: [Locations.id],
   }),
   
   // One batch can have many strain assignments
-  batchStrains: many(BatchStrainTable),
+  batchStrains: many(BatchStrains),
 }));

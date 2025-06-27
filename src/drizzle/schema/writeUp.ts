@@ -28,7 +28,7 @@
 
 import { date, index, integer, pgEnum, pgTable, text, uniqueIndex, uuid } from "drizzle-orm/pg-core"
 import { createdAt, id, updatedAt } from "../schemaHelpers"
-import { UserTable } from "./user"
+import { Users } from "./users"
 
 export const writeUpSeverities = ['verbal_warning', 'written_warning', 'final_warning', 'suspension', 'termination'] as const
 export type writeUpSeverity = (typeof writeUpSeverities)[number]
@@ -41,10 +41,10 @@ export const WriteUpTable = pgTable('writeUps', {
     id,
     employeeId: uuid()
         .notNull()
-        .references(() => UserTable.id, {onDelete: 'restrict'}),
+        .references(() => Users.id, {onDelete: 'restrict'}),
     issuedBy: uuid()
         .notNull()
-        .references(() => UserTable.id, {onDelete: 'restrict'}),
+        .references(() => Users.id, {onDelete: 'restrict'}),
     writeUpNumber: integer().notNull(),     // Sequential per employee
     severity: writeUpSeverityEnum().notNull(),
     issueDate: date().notNull(),           // When write-up was issued
@@ -56,7 +56,7 @@ export const WriteUpTable = pgTable('writeUps', {
     witnessInformation: text(),           // Any witness details
     resolvedDate: date(),                 // When issue was marked resolved
     resolvedBy: uuid()
-        .references(() => UserTable.id, {onDelete: 'restrict'}),
+        .references(() => Users.id, {onDelete: 'restrict'}),
     resolutionNotes: text(),              // Resolution details
     createdAt,
     updatedAt

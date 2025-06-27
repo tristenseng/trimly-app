@@ -1,6 +1,6 @@
 import { numeric, pgTable, text, uniqueIndex, uuid } from "drizzle-orm/pg-core";
 import { id } from "../schemaHelpers";
-import { UserTable } from "./user";
+import { Users } from "./users";
 import { DayTable } from "./day";
 import { relations } from "drizzle-orm";
 
@@ -32,11 +32,11 @@ import { relations } from "drizzle-orm";
  * - Foundation for payroll calculations, productivity analytics, and batch cost tracking
  */
 
-export const UserDayTable = pgTable('userDay', {
+export const WorkEntries = pgTable('userDay', {
   id,
   userId: uuid()
       .notNull()
-      .references(() => UserTable.id, {onDelete: 'restrict'}),
+      .references(() => Users.id, {onDelete: 'restrict'}),
   dayId: uuid()
       .notNull()
       .references(() => DayTable.id, {onDelete: 'restrict'}),
@@ -44,21 +44,21 @@ export const UserDayTable = pgTable('userDay', {
   hours: numeric({precision: 4, scale: 2}).notNull(),
   notes: text()
 }, (table) => [
-  uniqueIndex('UserDayTable_userId_dayId')
+  uniqueIndex('WorkEntries_userId_dayId')
       .on(table.userId, table.dayId)
 ])
 
 
-export const userDayRelations = relations(UserDayTable, ({ one }) => ({
+export const userDayRelations = relations(WorkEntries, ({ one }) => ({
   // Many user days belong to one user
-  user: one(UserTable, {
-    fields: [UserDayTable.userId],
-    references: [UserTable.id],
+  user: one(Users, {
+    fields: [WorkEntries.userId],
+    references: [Users.id],
   }),
   
   // Many user days belong to one day
   day: one(DayTable, {
-    fields: [UserDayTable.dayId],
+    fields: [WorkEntries.dayId],
     references: [DayTable.id],
   }),
 }));

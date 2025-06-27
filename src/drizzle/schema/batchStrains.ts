@@ -1,7 +1,7 @@
 import { boolean, date, pgTable, primaryKey, uniqueIndex, uuid } from "drizzle-orm/pg-core";
 import { id } from "../schemaHelpers";
-import { BatchTable } from "./batch";
-import { StrainTable } from "./strain";
+import { Batches } from "./batches";
+import { StrainTable } from "./strains";
 import { relations } from "drizzle-orm";
 import { DayTable } from "./day";
 
@@ -35,30 +35,30 @@ import { DayTable } from "./day";
  */
 
 
-export const BatchStrainTable = pgTable('batchStrains', {
+export const BatchStrains = pgTable('batchStrains', {
   id,
   batchId: uuid()
       .notNull()
-      .references(() => BatchTable.id, { onDelete: 'cascade'}),
+      .references(() => Batches.id, { onDelete: 'cascade'}),
   strainId: uuid()
       .notNull()
       .references(() => StrainTable.id, { onDelete: 'restrict' }),
 }, (table) => [
-  uniqueIndex('BatchStrainTable_batchId_strainId_unique')
+  uniqueIndex('BatchStrains_batchId_strainId_unique')
       .on(table.batchId, table.strainId)
 ])
 
 
-export const batchStrainTableRelations = relations(BatchStrainTable, ({ one, many }) => ({
+export const BatchStrainsRelations = relations(BatchStrains, ({ one, many }) => ({
   // Many batch-strains belong to one batch
-  batch: one(BatchTable, {
-    fields: [BatchStrainTable.batchId],
-    references: [BatchTable.id],
+  batch: one(Batches, {
+    fields: [BatchStrains.batchId],
+    references: [Batches.id],
   }),
   
   // Many batch-strains belong to one strain
   strain: one(StrainTable, {
-    fields: [BatchStrainTable.strainId],
+    fields: [BatchStrains.strainId],
     references: [StrainTable.id],
   }),
   

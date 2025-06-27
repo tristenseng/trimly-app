@@ -1,8 +1,8 @@
 import { boolean, pgTable, text } from "drizzle-orm/pg-core";
 import { id } from "../schemaHelpers";
 import { relations } from "drizzle-orm";
-import { UserLocationTable } from "./userLocation";
-import { BatchTable } from "./batch";
+import { LocationAssignments } from "./locationAssignments";
+import { Batches } from "./batches";
 
 /**
  * LOCATION_TABLE
@@ -19,7 +19,7 @@ import { BatchTable } from "./batch";
  * - Locations cannot be deleted if they have active user assignments or batch references
  *
  * Relationships:
- * - Many-to-many with users via userLocations junction table
+ * - Many-to-many with users via LocationAssignments junction table
  * - One-to-many with batches (each batch belongs to one location)
  * - Referenced by various downstream tables for location-specific operations
  *
@@ -28,17 +28,17 @@ import { BatchTable } from "./batch";
  * - Location-based filtering ensures admins only see relevant data
  */
 
-export const LocationTable = pgTable('locations', {
+export const Locations = pgTable('locations', {
   id,
   name: text().unique().notNull(),
   notes: text()
 })
 
 
-export const locationTableRelations = relations(LocationTable, ({ many }) => ({
+export const LocationsRelations = relations(Locations, ({ many }) => ({
   // One location can have many user assignments
-  userLocations: many(UserLocationTable),
+  LocationAssignments: many(LocationAssignments),
   
   // One location can have many batches
-  batches: many(BatchTable),
+  batches: many(Batches),
 }));
