@@ -1,4 +1,4 @@
-import { date, integer, pgEnum, pgTable, text, uniqueIndex } from "drizzle-orm/pg-core";
+import { date, integer, pgEnum, pgTable, text, uniqueIndex, uuid } from "drizzle-orm/pg-core";
 import { id } from "../schemaHelpers";
 import { Locations } from "./locations";
 import { relations } from "drizzle-orm";
@@ -6,7 +6,7 @@ import { BatchStrains } from "./batchStrains";
 
 
 /**
- * BATCH_TABLE
+ * BATCHES_TABLE
  *
  * Core production entity representing individual batch cycles.
  * Each batch processes multiple strains simultaneously at a specific location
@@ -42,7 +42,7 @@ export const batchStatusEnum = pgEnum(
 
 export const Batches = pgTable('batches', {
     id,
-    locationId: text()
+    locationId: uuid()
         .references(() => Locations.id, { onDelete: 'restrict'})
         .notNull(),
     number: integer().notNull(),    //sequential per location
@@ -64,5 +64,5 @@ export const BatchesRelations = relations(Batches, ({one, many}) => ({
   }),
   
   // One batch can have many strain assignments
-  NatchStrains: many(BatchStrains),
+  BatchStrains: many(BatchStrains),
 }));

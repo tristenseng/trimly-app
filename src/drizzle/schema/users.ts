@@ -5,7 +5,7 @@ import { LocationAssignments } from "./locationAssignments";
 import { WorkEntries } from "./workEntries";
 
 /**
- * USER TABLE
+ * USERS_TABLE
  *
  * Stores user information and their role assignments.
  * Users can be assigned to multiple locations through the LocationAssignments junction table.

@@ -1,11 +1,11 @@
-import { pgTable, text, uniqueIndex, uuid } from "drizzle-orm/pg-core";
-import { createdAt, id } from "../schemaHelpers";
-import { Users } from "./users";
+import { pgTable, uniqueIndex, uuid } from "drizzle-orm/pg-core";
+import { id } from "../schemaHelpers";
+import { Users } from "./Users";
 import { Locations } from "./locations";
 import { relations } from "drizzle-orm";
 
 /**
- * USERLOCATION_TABLE
+ * LOCATIONASSIGNMENTS_TABLE
  *
  * Junction table managing many-to-many relationships between users and locations.
  * Controls location-based access permissions and defines where employees can work.

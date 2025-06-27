@@ -1,4 +1,4 @@
-import { boolean, date, pgTable, primaryKey, uniqueIndex, uuid } from "drizzle-orm/pg-core";
+import { pgTable, uniqueIndex, uuid } from "drizzle-orm/pg-core";
 import { id } from "../schemaHelpers";
 import { Batches } from "./batches";
 import { Strains } from "./strains";
@@ -6,7 +6,7 @@ import { relations } from "drizzle-orm";
 import { WorkEntries } from "./workEntries";
 
 /**
- * BATCHSTRAIN_TABLE
+ * BATCHSTRAINS_TABLE
  *
  * Junction table managing many-to-many relationships between batches and strains.
  * Defines which strains are processed within each batch.

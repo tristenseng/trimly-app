@@ -1,11 +1,11 @@
-import { boolean, pgTable, text } from "drizzle-orm/pg-core";
+import { pgTable, text } from "drizzle-orm/pg-core";
 import { id } from "../schemaHelpers";
 import { relations } from "drizzle-orm";
 import { LocationAssignments } from "./locationAssignments";
 import { Batches } from "./batches";
 
 /**
- * LOCATION_TABLE
+ * LOCATIONS_TABLE
  *
  * Central registry of all operational locations where work is performed.
  * Serves as the primary reference for location-based access control and batch tracking.

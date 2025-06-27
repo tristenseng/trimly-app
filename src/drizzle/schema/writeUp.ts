@@ -1,5 +1,5 @@
 /**
- * WRITEUP_TABLE
+ * WRITEUPS_TABLE
  *
  * Disciplinary action tracking system for managing employee compliance issues.
  * Records formal write-ups issued to employees for policy violations, performance issues,
@@ -28,7 +28,7 @@
 
 import { date, index, integer, pgEnum, pgTable, text, uniqueIndex, uuid } from "drizzle-orm/pg-core"
 import { createdAt, id, updatedAt } from "../schemaHelpers"
-import { Users } from "./users"
+import { Users } from "./Users"
 
 export const writeUpSeverities = ['verbal_warning', 'written_warning', 'final_warning', 'suspension', 'termination'] as const
 export type writeUpSeverity = (typeof writeUpSeverities)[number]

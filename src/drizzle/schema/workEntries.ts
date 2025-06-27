@@ -1,11 +1,11 @@
-import { numeric, pgTable, text, uniqueIndex, uuid } from "drizzle-orm/pg-core";
+import { date, numeric, pgTable, text, uniqueIndex, uuid } from "drizzle-orm/pg-core";
 import { id } from "../schemaHelpers";
-import { Users } from "./users";
+import { Users } from "./Users";
 import { relations } from "drizzle-orm";
 import { BatchStrains } from "./batchStrains";
 
 /**
- * workEntries_TABLE
+ * WORKENTRIES_TABLE
  *
  * Junction table tracking individual employee work contributions on specific days and batches.
  * Core operational record linking workers, work days, and batch processing activities.
@@ -40,12 +40,13 @@ export const WorkEntries = pgTable('workEntries', {
   batchStrainsId: uuid()
       .notNull()
       .references(() => BatchStrains.id, {onDelete: 'cascade'}),
+  date: date().notNull(),
   amount: numeric({precision: 6, scale: 2}).notNull(),
   hours: numeric({precision: 4, scale: 2}).notNull(),
   notes: text()
 }, (table) => [
-  uniqueIndex('WorkEntries_userId_batchStrainsId')
-      .on(table.userId, table.batchStrainsId)
+  uniqueIndex('WorkEntries_userId_batchStrainsId_date')
+      .on(table.userId, table.batchStrainsId, table.date)
 ])
 
 
