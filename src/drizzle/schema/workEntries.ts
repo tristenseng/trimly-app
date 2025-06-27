@@ -1,11 +1,11 @@
 import { numeric, pgTable, text, uniqueIndex, uuid } from "drizzle-orm/pg-core";
 import { id } from "../schemaHelpers";
 import { Users } from "./users";
-import { DayTable } from "./day";
 import { relations } from "drizzle-orm";
+import { BatchStrains } from "./batchStrains";
 
 /**
- * USERDAY_TABLE
+ * workEntries_TABLE
  *
  * Junction table tracking individual employee work contributions on specific days and batches.
  * Core operational record linking workers, work days, and batch processing activities.
@@ -14,9 +14,9 @@ import { relations } from "drizzle-orm";
  * Business Rules:
  * - Each record represents one employee's work on one strain within one batch for one day
  * - Employees can only have one work record per day per strain (enforced by unique constraint)
- * - Only admins can create, read, update, or delete userDay records (employees have read-only access)
+ * - Only admins can create, read, update, or delete workEntries records (employees have read-only access)
  * - Admins can only create records for employees at their shared location
- * - All work logging must reference valid combinations of users, days, and batch-strain pairs
+ * - All work entries must reference valid combinations of users, and batch-strain pairs
  * - Amount refers to the amount (in grams) processed by the user for a specific strain on a specific day within a specific batch.
  * - Hour refers to the duration of work it took to process that amount (in grams).
  *
@@ -32,33 +32,33 @@ import { relations } from "drizzle-orm";
  * - Foundation for payroll calculations, productivity analytics, and batch cost tracking
  */
 
-export const WorkEntries = pgTable('userDay', {
+export const WorkEntries = pgTable('workEntries', {
   id,
   userId: uuid()
       .notNull()
       .references(() => Users.id, {onDelete: 'restrict'}),
-  dayId: uuid()
+  batchStrainsId: uuid()
       .notNull()
-      .references(() => DayTable.id, {onDelete: 'restrict'}),
+      .references(() => BatchStrains.id, {onDelete: 'cascade'}),
   amount: numeric({precision: 6, scale: 2}).notNull(),
   hours: numeric({precision: 4, scale: 2}).notNull(),
   notes: text()
 }, (table) => [
-  uniqueIndex('WorkEntries_userId_dayId')
-      .on(table.userId, table.dayId)
+  uniqueIndex('WorkEntries_userId_batchStrainsId')
+      .on(table.userId, table.batchStrainsId)
 ])
 
 
-export const userDayRelations = relations(WorkEntries, ({ one }) => ({
-  // Many user days belong to one user
-  user: one(Users, {
+export const workEntriesRelations = relations(WorkEntries, ({ one }) => ({
+  // Many work entries belong to one user
+  Users: one(Users, {
     fields: [WorkEntries.userId],
     references: [Users.id],
   }),
   
-  // Many user days belong to one day
-  day: one(DayTable, {
-    fields: [WorkEntries.dayId],
-    references: [DayTable.id],
+  // Many work entries belong to one batchstrain
+  BatchStrains: one(BatchStrains, {
+    fields: [WorkEntries.batchStrainsId],
+    references: [BatchStrains.id],
   }),
 }));

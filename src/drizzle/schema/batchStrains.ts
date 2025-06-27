@@ -1,9 +1,9 @@
 import { boolean, date, pgTable, primaryKey, uniqueIndex, uuid } from "drizzle-orm/pg-core";
 import { id } from "../schemaHelpers";
 import { Batches } from "./batches";
-import { StrainTable } from "./strains";
+import { Strains } from "./strains";
 import { relations } from "drizzle-orm";
-import { DayTable } from "./day";
+import { WorkEntries } from "./workEntries";
 
 /**
  * BATCHSTRAIN_TABLE
@@ -17,13 +17,13 @@ import { DayTable } from "./day";
  * - Each strain can be used across multiple batches (same strain grown in different batch processing cycles)
  * - Cannot have duplicate strain assignments within the same batch (enforced by unique constraint)
  * - Must reference valid batch and strain records that exist in their respective tables
- * - Batch-strain combinations cannot be deleted if referenced by day records
+ * - Batch-strain combinations cannot be deleted if referenced by workEntries records
  * - Only admins can create, read, update, or delete batch-strain assignments
  *
  * Relationships:
  * - Many-to-one with batches (batches can have multiple strain assignments)
  * - Many-to-one with strains (strains can be assigned to multiple batches)
- * - One-to-many with days (each day record references a specific batch-strain combination)
+ * - One-to-many with workEntries (each workEntries record references a specific batch-strain combination on a specific day)
  * - Controls which strain-batch combinations are valid for daily work logging
  *
  * Notes:
@@ -42,7 +42,7 @@ export const BatchStrains = pgTable('batchStrains', {
       .references(() => Batches.id, { onDelete: 'cascade'}),
   strainId: uuid()
       .notNull()
-      .references(() => StrainTable.id, { onDelete: 'restrict' }),
+      .references(() => Strains.id, { onDelete: 'restrict' }),
 }, (table) => [
   uniqueIndex('BatchStrains_batchId_strainId_unique')
       .on(table.batchId, table.strainId)
@@ -51,18 +51,18 @@ export const BatchStrains = pgTable('batchStrains', {
 
 export const BatchStrainsRelations = relations(BatchStrains, ({ one, many }) => ({
   // Many batch-strains belong to one batch
-  batch: one(Batches, {
+  Batches: one(Batches, {
     fields: [BatchStrains.batchId],
     references: [Batches.id],
   }),
   
   // Many batch-strains belong to one strain
-  strain: one(StrainTable, {
+  Strains: one(Strains, {
     fields: [BatchStrains.strainId],
-    references: [StrainTable.id],
+    references: [Strains.id],
   }),
   
-  // One batch-strain can have many work days
-  days: many(DayTable),
+  // One batch-strain can have many work entries
+  WorkEntries: many(WorkEntries),
 }));
 

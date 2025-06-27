@@ -40,5 +40,5 @@ export const LocationsRelations = relations(Locations, ({ many }) => ({
   LocationAssignments: many(LocationAssignments),
   
   // One location can have many batches
-  batches: many(Batches),
+  Batches: many(Batches),
 }));

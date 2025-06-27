@@ -49,13 +49,13 @@ export const LocationAssignments = pgTable('locationAssignments', {
 
 export const LocationAssignmentsRelations = relations(LocationAssignments, ({ one }) => ({
   // Many user locations belong to one user
-  user: one(Users, {
+  Users: one(Users, {
     fields: [LocationAssignments.userId],
     references: [Users.id],
   }),
   
   // Many user locations belong to one location
-  location: one(Locations, {
+  Locations: one(Locations, {
     fields: [LocationAssignments.locationId],
     references: [Locations.id],
   }),

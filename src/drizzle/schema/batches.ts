@@ -24,8 +24,6 @@ import { BatchStrains } from "./batchStrains";
  * Relationships:
  * - Many-to-one with locations (each batch belongs to one location permanently)
  * - One-to-many with batchStrains (tracks which strains are processed in this batch)
- * - One-to-many with days via batchStrains (tracks daily work across all strains)
- * - Referenced by userDay through day relationships for work logging
  *
  * Notes:
  * - startDate marks beginning of actual batch processing (not planning phase)
@@ -60,11 +58,11 @@ export const Batches = pgTable('batches', {
 
 export const BatchesRelations = relations(Batches, ({one, many}) => ({
   // Many batches belong to one location
-  location: one(Locations, {
+  Locations: one(Locations, {
     fields: [Batches.locationId],
     references: [Locations.id],
   }),
   
   // One batch can have many strain assignments
-  batchStrains: many(BatchStrains),
+  NatchStrains: many(BatchStrains),
 }));

@@ -28,7 +28,7 @@ import { BatchStrains } from "./batchStrains";
  * - Strain selection drives batch planning and workflows
  */
 
-export const StrainTable = pgTable('strains', {
+export const Strains = pgTable('strains', {
   id,
   name: text().unique().notNull(),
   description: text(),
@@ -36,7 +36,7 @@ export const StrainTable = pgTable('strains', {
   notes: text()
 })
 
-export const strainTableRelations = relations(StrainTable, ({ many }) => ({
+export const strainTableRelations = relations(Strains, ({ many }) => ({
   // One strain can be used in many batches
   batchStrains: many(BatchStrains),
 }));

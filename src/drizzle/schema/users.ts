@@ -1,4 +1,4 @@
-import { boolean, integer, pgEnum, pgTable, text } from "drizzle-orm/pg-core";
+import { integer, pgEnum, pgTable, text } from "drizzle-orm/pg-core";
 import { createdAt, id, updatedAt } from "../schemaHelpers";
 import { relations } from 'drizzle-orm';
 import { LocationAssignments } from "./locationAssignments";
@@ -21,7 +21,7 @@ import { WorkEntries } from "./workEntries";
  *
  * Relationships:
  * - Many-to-many with locations via LocationAssignments junction table
- * - One-to-many with userDay (tracks individual work contributions)
+ * - One-to-many with workEntires (tracks individual work contributions)
  * - Email used for authentication with no domain restrictions
  *
  * Notes:
@@ -55,6 +55,6 @@ export const UsersRelations = relations(Users, ({ many }) => ({
   LocationAssignments: many(LocationAssignments),
   
   // One user can have many daily work records
-  userDays: many(WorkEntries),
+  WorkEntries: many(WorkEntries),
 }));
 
