@@ -1,5 +1,5 @@
 import { pgTable, text } from "drizzle-orm/pg-core";
-import { id } from "../schemaHelpers";
+import { createdAt, id, updatedAt } from "../schemaHelpers";
 import { relations } from "drizzle-orm";
 import { LocationAssignments } from "./locationAssignments";
 import { Batches } from "./batches";
@@ -31,7 +31,9 @@ import { Batches } from "./batches";
 export const Locations = pgTable('locations', {
   id,
   name: text().unique().notNull(),
-  notes: text()
+  notes: text(),
+  createdAt,
+  updatedAt
 })
 
 

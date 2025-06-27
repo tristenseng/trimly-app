@@ -1,5 +1,5 @@
 import { pgTable, uniqueIndex, uuid } from "drizzle-orm/pg-core";
-import { id } from "../schemaHelpers";
+import { createdAt, id, updatedAt } from "../schemaHelpers";
 import { Batches } from "./batches";
 import { Strains } from "./strains";
 import { relations } from "drizzle-orm";
@@ -43,6 +43,8 @@ export const BatchStrains = pgTable('batchStrains', {
   strainId: uuid()
       .notNull()
       .references(() => Strains.id, { onDelete: 'restrict' }),
+  createdAt,
+  updatedAt
 }, (table) => [
   uniqueIndex('BatchStrains_batchId_strainId_unique')
       .on(table.batchId, table.strainId)

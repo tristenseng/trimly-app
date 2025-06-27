@@ -1,5 +1,5 @@
 import { date, integer, pgEnum, pgTable, text, uniqueIndex, uuid } from "drizzle-orm/pg-core";
-import { id } from "../schemaHelpers";
+import { createdAt, id, updatedAt } from "../schemaHelpers";
 import { Locations } from "./locations";
 import { relations } from "drizzle-orm";
 import { BatchStrains } from "./batchStrains";
@@ -50,6 +50,8 @@ export const Batches = pgTable('batches', {
     endDate: date(),                //when batch is complete
     status: batchStatusEnum().notNull().default('in_progress'),
     notes: text(),                  //production notes, issues, observations
+    createdAt,
+    updatedAt
 }, (table) => [
         //there cannot be two batches with the same batch number at the same location
         uniqueIndex('Batches_locationId_number')

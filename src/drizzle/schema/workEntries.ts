@@ -1,5 +1,5 @@
 import { date, numeric, pgTable, text, uniqueIndex, uuid } from "drizzle-orm/pg-core";
-import { id } from "../schemaHelpers";
+import { createdAt, id, updatedAt } from "../schemaHelpers";
 import { Users } from "./Users";
 import { relations } from "drizzle-orm";
 import { BatchStrains } from "./batchStrains";
@@ -43,7 +43,9 @@ export const WorkEntries = pgTable('workEntries', {
   date: date().notNull(),
   amount: numeric({precision: 6, scale: 2}).notNull(),
   hours: numeric({precision: 4, scale: 2}).notNull(),
-  notes: text()
+  notes: text(),
+  createdAt,
+  updatedAt
 }, (table) => [
   uniqueIndex('WorkEntries_userId_batchStrainsId_date')
       .on(table.userId, table.batchStrainsId, table.date)
