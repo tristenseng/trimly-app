@@ -22,7 +22,7 @@ import { BatchStrains } from "./batchStrains";
  *
  * Relationships:
  * - Many-to-one with users (tracks which employee performed the work)
- * - Many-to-one with days (tracks when the work was performed)
+ * - Many-to-one with batchStrains (tracks what strain the work was performed on)
  * - Many-to-one with batches (tracks which batch was worked on)
  * - Location-based access control inherited through user-location and batch-location relationships
  *
